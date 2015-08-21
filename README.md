@@ -15,14 +15,14 @@ Sample Usage
 ------------
 
 Asynchronous method:
-```
+```objc
 [wkWebView captureScreenshotWithCompletionHandler:^(NSImage *screenshot) {
   self.imageView.image = screenshot;
 }];
 ```
 
  Synchronous method:
-```
+```objc
 dispatch_time_t timeout = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC));
 self.imageView.image = [wkWebView captureScreenshotWithTimeout:timeout];
 ```
