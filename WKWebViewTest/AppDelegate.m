@@ -93,9 +93,7 @@
 - (void)captureScreenshotSyncInWKWebView:(WKWebView*)wkWebView
 {
     dispatch_time_t timeout = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC));
-    NSImage* screenshot = [wkWebView captureScreenshotWithTimeout:timeout];
-    
-    self.imageView.image = screenshot;
+    self.imageView.image = [wkWebView captureScreenshotWithTimeout:timeout];
 }
 
 @end
