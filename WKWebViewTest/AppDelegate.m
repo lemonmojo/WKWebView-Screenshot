@@ -10,29 +10,6 @@
 #import <WebKit/WebKit.h>
 #import "WKWebView+Screenshot.h"
 
-@interface NSObject (Testing)
-
-- (void)performSelector:(SEL)selector withBlockingCallback:(dispatch_block_t)block;
-
-@end
-
-@implementation NSObject (Testing)
-
-- (void)performSelector:(SEL)selector withBlockingCallback:(dispatch_block_t)block
-{
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    
-    [self performSelector:selector withObject:^{
-        if (block) block();
-        dispatch_semaphore_signal(semaphore);
-    }];
-    
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    dispatch_release(semaphore);
-}
-
-@end
-
 @interface AppDelegate ()
 
 @property (assign) IBOutlet NSWindow *window;
