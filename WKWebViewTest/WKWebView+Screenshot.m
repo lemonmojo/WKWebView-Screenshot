@@ -8,6 +8,48 @@
 
 #import "WKWebView+Screenshot.h"
 
+@implementation LMFakeWKView
+
+- (instancetype)initWithWebView:(WKWebView*)webView
+{
+    self = [super init];
+    
+    if (self) {
+        self.webView = webView;
+    }
+    
+    return self;
+}
+
++ (instancetype)fakeWKViewWithWebView:(WKWebView*)webView
+{
+    return [[[LMFakeWKView alloc] initWithWebView:webView] autorelease];
+}
+
+- (void)dealloc
+{
+    self.webView = nil;
+    
+    [super dealloc];
+}
+
+- (NSView*)_thumbnailView
+{
+    return nil;
+}
+
+- (NSWindow*)window
+{
+    return self.webView.window;
+}
+
+- (void*)pageRef
+{
+    return [self.webView performSelector:@selector(_pageForTesting)];
+}
+
+@end
+
 @implementation LMWKThumbnailView {
     CaptureScreenshotCompletionHandler _completionHandler;
 }
@@ -27,9 +69,10 @@
 
 - (instancetype)initWithWKWebView:(WKWebView*)wkWebView completionHandler:(CaptureScreenshotCompletionHandler)completionHandler
 {
-    WKView* wkView = [[wkWebView subviews] objectAtIndex:0];
+    self.fakeWKView = [LMFakeWKView fakeWKViewWithWebView:wkWebView];
     
-    if (self = [super initWithFrame:NSZeroRect fromWKView:wkView]) {
+    if (self = [super initWithFrame:NSZeroRect fromWKView:(WKView*)self.fakeWKView]) {
+        self.exclusivelyUsesSnapshot = YES;
         _completionHandler = [completionHandler copy];
     }
     
@@ -38,21 +81,19 @@
 
 - (void)dealloc
 {
-    [_completionHandler release];
-    _completionHandler = nil;
+    [_completionHandler release]; _completionHandler = nil;
+    self.fakeWKView = nil;
     
     [super dealloc];
 }
 
 - (void)captureScreenshot
 {
-    [self _viewWasParented];
+    [self requestSnapshot];
 }
 
 - (void)_didTakeSnapshot:(CGImageRef)image
 {
-    [self _viewWasUnparented];
-    
     NSImage *screenshot = nil;
     
     if (image) {
