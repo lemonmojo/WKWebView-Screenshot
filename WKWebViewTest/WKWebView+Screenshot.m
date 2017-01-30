@@ -45,7 +45,10 @@
 
 - (void*)pageRef
 {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
     return [self.webView performSelector:@selector(_pageForTesting)];
+#pragma clang diagnostic pop
 }
 
 @end
