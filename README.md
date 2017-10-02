@@ -1,5 +1,7 @@
 # WKWebView+Screenshot
 
+**Update October 2, 2017**: These workarounds are **not required** anymore when targeting **10.13+** because Apple added an official API. (see [takeSnapshotWithConfiguration:completionHandler:](https://developer.apple.com/documentation/webkit/wkwebview/2873260-takesnapshotwithconfiguration))
+
 **Update January 18, 2017**: Found another workaround by faking the presence of the WKView.
 
 **Update October 22, 2016**: This doesn't work anymore in 10.12.1 (maybe even 10.12, didn't test) because `WKView` is not exposed as a subview of `WKWebView` anymore. There is however a new API in the making that will allow taking screenshots of `WKWebView`s without using private API: https://bugs.webkit.org/show_bug.cgi?id=161450
